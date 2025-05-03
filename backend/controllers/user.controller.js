@@ -52,10 +52,6 @@ const login = async (req, res) => {
       .status(httpStatus.UNAUTHORIZED)
       .json({ message: "Invalid Username or Password" });
   }
-
-  return res
-    .status(httpStatus.UNAUTHORIZED)
-    .json({ message: "Invalid password" });
 };
 
 export { register, login };
