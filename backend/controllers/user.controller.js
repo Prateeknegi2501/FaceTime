@@ -46,7 +46,7 @@ const login = async (req, res) => {
     await user.save();
     return res
       .status(httpStatus.OK)
-      .json({ message: "Login Successfully", token: token });
+      .json({ message: "Login Successfully", token: token ,user:user.name});
   } else {
     return res
       .status(httpStatus.UNAUTHORIZED)

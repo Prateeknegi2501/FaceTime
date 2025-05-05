@@ -68,16 +68,16 @@ export default function VideoMeet() {
       console.log(e);
     }
   };
+  
 
   useEffect(() => {
     getPermissions();
   }, []);
 
-  let silence=()=>{
-    let ctx= new AudioContext()
-    let oscillator= ctx.createOscillator();
-    
-  }
+  let silence = () => {
+    let ctx = new AudioContext();
+    let oscillator = ctx.createOscillator();
+  };
 
   let getUserMediaSuccess = (stream) => {
     try {
@@ -118,7 +118,6 @@ export default function VideoMeet() {
           }
 
           //Black Silence
-
 
           for (let id in connections) {
             connections[id].addStream(window.localStream);

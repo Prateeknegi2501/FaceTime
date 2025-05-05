@@ -6,7 +6,6 @@ import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { AuthContext } from "../contexts/authContext";
 import { Snackbar } from "@mui/material";
@@ -19,9 +18,7 @@ export default function Authentication() {
   const [message, setMessage] = useState("");
 
   const [formState, setFromState] = useState(0);
-
   const [open, setOpen] = useState(false);
-
   const { handleRegister, handleLogin } = useContext(AuthContext);
 
   let handleAuth = async () => {
@@ -35,6 +32,8 @@ export default function Authentication() {
         setPassword("");
         setUserName("");
         setName("");
+        setError("");
+
       }
       if (formState === 1) {
         let result = await handleLogin(username, password);
@@ -44,11 +43,14 @@ export default function Authentication() {
         setPassword("");
         setUserName("");
         setName("");
+        setError("");
       }
     } catch (error) {
       let message = error?.response?.data?.message;
       setError(message);
-
+      setPassword("");
+      setUserName("");
+      setName("");
     }
   };
 
