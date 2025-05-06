@@ -80,8 +80,9 @@ main > div:nth-child(1) > div[role="button"] > a {
 }
 main .LandingImg {
   height: 73vh;
+  width: 38vw;
   transition: transform 0.2s ease-in;
-}
+} 
 main .LandingImg:hover {
   transform: scale(1.05);
 }

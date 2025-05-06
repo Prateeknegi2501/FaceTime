@@ -1,10 +1,16 @@
 import React from "react";
 import "../App.css";
 import { Link, Links } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 export default function Landing() {
   return (
     <>
+      <Helmet>
+        <link rel="preload" href="/call`.svg" as="image" type="image/svg+xml" />
+        <link rel="preload" href="/bg.svg" as="image" type="image/svg+xml" />
+      </Helmet>
+
       <div className="LandingContainer">
         <nav>
           <div className="NavLeftLanding">
@@ -38,7 +44,7 @@ export default function Landing() {
             </div>
           </div>
           <div>
-            <img className="LandingImg" src="/call.svg" alt="" />
+            <img className="LandingImg" src="/call.svg" alt="videocall Image" />
           </div>
         </main>
       </div>

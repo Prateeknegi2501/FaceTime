@@ -4,6 +4,11 @@
   box-sizing: border-box;
   font-family:  sans-serif;
 }
+@font-face {
+  font-family: sans-serif;
+  src: url("sans-serif.woff2") format("woff2");
+  font-display: swap;
+}
 
 body, html {
   height: 100%;
