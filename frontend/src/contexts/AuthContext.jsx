@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
 
         localStorage.setItem("user", JSON.stringify(request.data.user));
         setUserData(request.data.user);
-        // router("/home")
+        router("/home");
         return request.data.message;
       }
     } catch (e) {
@@ -51,9 +51,36 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const getHistory = async () => {
+    try {
+      let request = await client.get("get_all_activity", {
+        params: {
+          token: localStorage.getItem("token"),
+        },
+      });
+      return request.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+  const addHistory = async (meetingCode) => {
+    try {
+      let request = await client.post("add_to_activity", {
+        token: localStorage.getItem("token"),
+        meetingCode: meetingCode,
+      });
+      return request;
+    } catch (error) {
+      throw error;
+    }
+  };
+  
+
   const data = {
     userdata,
     setUserData,
+    getHistory,
+    addHistory,
     handleRegister,
     handleLogin,
   };

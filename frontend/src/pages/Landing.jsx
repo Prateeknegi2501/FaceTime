@@ -1,9 +1,22 @@
 import React from "react";
 import "../App.css";
-import { Link, Links } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 export default function Landing() {
+  const navigate = useNavigate();
+ function generateRandomString(length = 5) {
+   const characters =
+     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+   let result = "";
+   const charactersLength = characters.length;
+   for (let i = 0; i < length; i++) {
+     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+   }
+   return result;
+ }
+  
+  
   return (
     <>
       <Helmet>
@@ -14,15 +27,21 @@ export default function Landing() {
       <div className="LandingContainer">
         <nav>
           <div className="NavLeftLanding">
-            <h2>
+            <h2 onClick={() => navigate("/")}>
               <span className="initials">F</span>ACE
               <span className="initials"> T</span>IME
             </h2>
           </div>
           <div className="NavRightLanding">
-            <h3>Join As Guest</h3>
-            <h3>Register</h3>
-            <div role="button" className="loginBtn">
+            <h3 onClick={() => navigate(`meet/${generateRandomString()}`)}>
+              Join As Guest
+            </h3>
+            <h3 onClick={() => navigate("/auth")}>Register</h3>
+            <div
+              role="button"
+              className="loginBtn"
+              onClick={() => navigate("/auth")}
+            >
               Log In
             </div>
           </div>
