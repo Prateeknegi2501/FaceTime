@@ -14,7 +14,7 @@ function Home() {
 
   const JoinVideoCall = async () => {
     await addHistory(meetingCode);
-    navigate(`/${meetingCode}`);
+    navigate(`/meet/${meetingCode}`);
   };
 
   return (
