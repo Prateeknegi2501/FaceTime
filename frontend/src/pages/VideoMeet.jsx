@@ -14,37 +14,45 @@ import { useNavigate } from "react-router-dom";
 
 const serverURL = "http://localhost:8000";
 var connections = {};
-const iceCandidateQueue = {};
 
 const peerConfigConnections = {
   iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
 };
-//Stun server are lightweight server running on public internet and return Ip address of requester's device
+
 export default function VideoMeet() {
-  var socketRef = useRef();
-  var socketIdRef = useRef();
-  let localVideoRef = useRef();
+  var socketRef = useRef(); //client instance
+  var socketIdRef = useRef(); //user Socket id
+  let localVideoRef = useRef(); //local video ref
+  const videoRef = useRef([]); //ref of remote videos
+
   let [videoAvailable, setVideoAvailable] = useState(true);
   let [audioAvailable, setAudioAvailable] = useState(true);
   let [screenAvailable, setScreenAvailable] = useState(true);
-  let [video, setVideo] = useState();
-  let [audio, setAudio] = useState();
-  let [screen, setScreen] = useState();
-  let [showModal, setShowModal] = useState(false); //video controls
-  let [messages, setMessages] = useState([]);
-  const [message, setMessage] = useState();
+
+  let [video, setVideo] = useState(); // camera on/off toggle
+  let [audio, setAudio] = useState(); // mic on/off toggle
+  let [screen, setScreen] = useState(); //// screen share on/off toggle
+
+  let [showModal, setShowModal] = useState(false); //chat panel
+  let [messages, setMessages] = useState([]); //  chat history
+  const [message, setMessage] = useState(); //current message input
   const [newMessages, setNewMessages] = useState(0); //pop up for new message
+
   const [askForUsername, setAskForUsername] = useState(true);
   const [username, setUsername] = useState("");
-  const videoRef = useRef([]);
-  const [videos, setVideos] = useState([]);
+
+  const [videos, setVideos] = useState([]); //array of { socketId, stream }
+
+  const iceCandidateQueue = {};
+
+  //Getting Permissions
 
   const getPermissions = async () => {
     try {
       // Checking both video and audio permissions in a single call
       const userMediaStream = await navigator.mediaDevices.getUserMedia({
-        video: true, // Check if video is available
-        audio: true, // Check if audio is available
+        video: true,
+        audio: true,
       });
 
       // If permissions are granted, set the states accordingly
@@ -76,6 +84,8 @@ export default function VideoMeet() {
     getPermissions();
   }, []);
 
+  //Black Slience
+
   let silence = () => {
     let ctx = new AudioContext();
     let oscillator = ctx.createOscillator();
@@ -95,7 +105,9 @@ export default function VideoMeet() {
     return Object.assign(stream.getVideoTracks()[0], { enabled: false });
   };
 
+  //sucess handler
   let getUserMediaSuccess = (stream) => {
+    //stop old track
     try {
       window.localStream.getTracks().forEach((track) => track.stop());
     } catch (error) {
@@ -114,10 +126,10 @@ export default function VideoMeet() {
         connections[id].addTrack(track, window.localStream);
       });
       /*WebRTC itself doesn’t handle signaling.
-      So we have to
-      * You create an offer (createOffer()).
-      * You set it as your local description (setLocalDescription()).
-      * Then you emit it to the other user via socket (socket.emit()).*/
+        So we have to
+        * You create an offer (createOffer()).
+        * You set it as your local description (setLocalDescription()).
+        * Then you emit it to the other user via socket (socket.emit()).*/
 
       connections[id].onnegotiationneeded = async () => {
         try {
@@ -179,7 +191,7 @@ export default function VideoMeet() {
           getUserMediaSuccess(stream);
         })
         .catch((e) => {
-          console.log("Availablity error: ", e); //User denies Permisionor other errors
+          console.log("Availablity error: ", e);
         });
     } else {
       try {
@@ -196,10 +208,10 @@ export default function VideoMeet() {
       getUserMedia();
     }
   }, [audio, video]);
+
+ 
+
   //gotMessageFromServer
-
-  const iceCandidateQueue = {};
-
   const gotMessageFromServer = (fromId, message) => {
     const signal = JSON.parse(message);
     if (fromId === socketIdRef.current) return;

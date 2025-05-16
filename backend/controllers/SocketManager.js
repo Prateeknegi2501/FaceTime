@@ -20,7 +20,7 @@ export const connectToSocket = (server) => {
     socket.on("join-call", (path) => {
       //Check path is defined or not if not create a connection then push the user into that path also add timeOnline
       //Send users a message to inform new user connected
-      //
+      
       if (connections[path] === undefined) {
         connections[path] = [];
       }
